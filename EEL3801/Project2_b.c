@@ -46,13 +46,42 @@ int main(){
     second_word = to_lowercase(second_word);
 
     int index = 0;
+    int char_index = 0;
     while(p_string[index] != NULL){
         p_string[index] = to_lowercase(p_string[index]);
         
-        if(strcmp(p_string[index], first_word) == 0)
-            first_word_ctr++;
-        if(strcmp(p_string[index], second_word) == 0)
-            second_word_ctr++;
+        while(first_word[char_index] != '\0'){           
+            if(first_word[char_index] == p_string[index][char_index]){
+                char_index++;
+
+                if(first_word[char_index] == '\0'){
+                    first_word_ctr++;
+                    char_index = 0;
+                    break;
+                }
+            }
+            else{
+                char_index = 0;
+                break;
+            }
+        }
+
+        while(second_word[char_index] != '\0'){           
+            if(second_word[char_index] == p_string[index][char_index]){
+                char_index++;
+
+                if(second_word[char_index] == '\0'){
+                    second_word_ctr++;
+                    char_index = 0;
+                    break;
+                }
+            }
+            else{
+                char_index = 0;
+                break;
+            }
+        }
+        
         index++;
     }
 
