@@ -88,6 +88,15 @@ int main(){
     printf("%s: %d\n", first_word, first_word_ctr);
     printf("%s: %d\n", second_word, second_word_ctr);
 
+    printf("%s", first_word);
+    for(int index = 0; index < first_word_ctr; index++)
+        printf("#");
+    
+    printf("\n%s", second_word);
+    for(int index = 0; index < second_word_ctr; index++)
+        printf("#");
+    printf("\n");
+
 
     return 0;
 }
