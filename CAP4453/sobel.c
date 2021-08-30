@@ -1,5 +1,6 @@
 #include <stdio.h>                          /* Sobel.c */
 #include <math.h>
+#include <stdlib.h>
 
         int pic[256][256];
         int outpicx[256][256];
@@ -8,13 +9,14 @@
         int masky[3][3] = {{1,2,1},{0,0,0},{-1,-2,-1}};
         double ival[256][256],maxival;
 
-main(argc,argv)
+void main(argc,argv)
 int argc;
 char **argv;
 {
     int i,j,p,q,mr,sum1,sum2;
-    double threshold;
-    FILE *fo1, *fo2, *fp1, *fopen();
+    int rows = 256, cols = 256;
+    double threshold, threshold_2 = 120;
+    FILE *fo1, *fo2, *fo3, *fp1, *fopen();
     char *foobar;
 
     argc--; argv++;
@@ -24,11 +26,25 @@ char **argv;
 	argc--; argv++;
 	foobar = *argv;
 	fo1=fopen(foobar,"wb");
-
         
-    argc--; argv++;
+   argc--; argv++;
 	foobar = *argv;
 	threshold = atof(foobar);
+
+   fo2=fopen("out2.pgm", "wb");
+   fo3 = fopen("out3.pgm", "wb");
+
+   fprintf(fo1, "P5\n");
+   fprintf(fo1, "%d %d\n", rows, cols);
+   fprintf(fo1, "255\n");
+
+   fprintf(fo2, "P5\n");
+   fprintf(fo2, "%d %d\n", rows, cols);
+   fprintf(fo2, "255\n");
+
+   fprintf(fo3, "P5\n");
+   fprintf(fo3, "%d %d\n", rows, cols);
+   fprintf(fo3, "255\n");
 
     for (i=0;i<256;i++)
         { for (j=0;j<256;j++)
@@ -74,10 +90,39 @@ char **argv;
         for (i=0;i<256;i++)
           { for (j=0;j<256;j++)
             {
-             ival[i][j] = (ival[i][j] / maxival) * 255;            
+             ival[i][j] = (ival[i][j] / maxival) * 255;
              fprintf(fo1,"%c",(char)((int)(ival[i][j])));
-             
             }
           }
 
+          for (i=0;i<256;i++)
+          { for (j=0;j<256;j++)
+            {
+               //ival[i][j] = (ival[i][j] / maxival) * 255;
+               if(ival[i][j] > threshold){
+                  fprintf(fo2,"%c",(char)255);
+               } 
+               else{
+                  fprintf(fo2,"%c",(char)((int)(0)));
+               }    
+            }
+          }
+
+          for (i=0;i<256;i++)
+          { for (j=0;j<256;j++)
+            {
+               //ival[i][j] = (ival[i][j] / maxival) * 255;
+               if(ival[i][j] > threshold_2){
+                  //fprintf(fo3,"%c",(char)((int)(ival[i][j])));
+                  fprintf(fo3,"%c",(char)255);
+               } 
+               else{
+                  fprintf(fo3,"%c",(char)0);
+               }    
+            }
+          }
+
+          fclose(fo1);
+          fclose(fo2);
+          fclose(fo3);
 }
