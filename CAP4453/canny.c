@@ -24,10 +24,11 @@ char **argv;
         int     i,j,p,q,s,t,mr,centx,centy;
         int high_threshold = 100;
         int low_threshold = 35;
-        double  maskval,xsum,ysum,sig,maxival,minival,maxval,ZEROTOL, slope;
+        double  maskval,xsum,ysum,sig,maxival,minival,maxval,ZEROTOL, slope, percent;
         FILE    *fo1, *fo2,*fo3,*fp1, *fopen();
         char    *foobar;
 
+        
         argc--; argv++;
         foobar = *argv;
         fp1=fopen(foobar,"rb");
@@ -42,6 +43,10 @@ char **argv;
         argc--; argv++;
         foobar = *argv;
         sig = atof(foobar);
+
+      //printf("Enter amount for percent:\n");
+      //scanf("%d", &percent);
+      percent = .05;
 
       /*
         argc--; argv++;
@@ -136,6 +141,28 @@ char **argv;
 
          memcpy(print_peak, peak, sizeof(peak));
 
+//////////////////////////// AUTOMATICALLY GET HIGH/LOW THRESHOLD 
+         double histogram[PICSIZE];
+         for(i = mr; i < 256 - mr; i++){
+            for(j = mr; j < 256 - mr; j++){
+               (histogram[(int)ival[i][j]])++;
+            }
+         }
+
+         double cutoff = percent * 256 * 256;
+         int array_length = sizeof(histogram) / sizeof(double);
+         int array_max;
+
+         for(i = array_length; i > 1; i--) {
+            array_max += histogram[i];
+
+            if(array_max > cutoff)
+               break;
+         }
+
+         high_threshold = i;
+         low_threshold = .15 * high_threshold;
+
 //////////////////////////// THRESHOLD
 /// CHECK AGAINST HIGH/LOW THRESHOLD
          for(i = mr; i < 256 - mr; i++) {
@@ -197,4 +224,8 @@ char **argv;
              fprintf(fo3,"%c",(char)((int)(final[i][j])));
             }
           }
+
+         fclose(fo1);
+         fclose(fo2);
+         fclose(fo3);
 }
