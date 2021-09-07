@@ -46,6 +46,10 @@ char **argv;
    fprintf(fo3, "%d %d\n", rows, cols);
    fprintf(fo3, "255\n");
 
+   /* OR CAN USE 
+   fprintf(fo1,"P5\n256 256\n255\n");   Print out the .pgm header 
+   */
+
     for (i=0;i<256;i++)
         { for (j=0;j<256;j++)
                 {
